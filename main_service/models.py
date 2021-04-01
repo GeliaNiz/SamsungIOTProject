@@ -4,6 +4,7 @@ import datetime
 
 # Create your models here.
 class State(models.Model):
+    pot_id = models.IntegerField(default=0)
     humidity = models.FloatField(default=0)
     temperature = models.FloatField(default=0)
     illumination = models.FloatField(default=0)

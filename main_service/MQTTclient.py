@@ -6,9 +6,6 @@ broker = 'localhost'
 port = 1883
 client_id = f'python-mqtt-{randint(0, 1000)}'
 main_topic = 'global/#'
-topics = {
-
-}
 
 
 def on_connect(client, userdata, flags, rc):
@@ -17,14 +14,18 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    topic = str(msg.topic).replace('global/', '')
-    value = str(msg.payload).replace('b', "").replace("'", "")
-    state = State()
-    setattr(state, topic, float(value))
+    main_thread, pot_id, attribute = str(msg.topic).split('/')
+    value = float(msg.payload)
+    if not State.objects.filter(pot_id=int(pot_id)).exists():
+        state = State()
+    else:
+        state = State.objects.get(pot_id=int(pot_id))
+    setattr(state, attribute, value)
+    state.pot_id = int(pot_id)
     state.save()
 
 
-def send(client, topic, message, retain, qos):
+def send(client, topic, message, retain=False, qos=0):
     client.publish(topic=topic, payload=message, retain=retain, qos=qos)
 
 
