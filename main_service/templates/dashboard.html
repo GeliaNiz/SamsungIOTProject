@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Temperature</h2>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    function update() {
+    $.ajax({
+        type: 'GET',
+        url: 'get_users',
+        success: function (data){
+            $.each(data,function(index,value){
+                $("#"+value.pot_id).text(value.pot_id+ ' - ' + value.temperature)
+            })
+        },
+        error: function (error){
+        }
+    }).then(function() {
+
+    });
+
+}
+    setInterval(update, 2000);
+</script>
+{% for state in states %}
+    {% with n_id=state.pot_id %}
+        <h4 id = {{ n_id }}>{{ state.pot_id }} - {{ state.temperature }}</h4>
+    {% endwith %}
+{% endfor %}
+</body>
+</html>
