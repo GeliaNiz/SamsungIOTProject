@@ -1,35 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% load static %}
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
 <h2>Temperature</h2>
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"><script/>
+    <div id="graphs" style="display: inline-block">
+        <div id="container1" style="position: relative; float: right;height:40vh; width:40vw">
+            <canvas id="bar-chart"></canvas>
+        </div>
+        <div id="container1" style="position: relative; float: left;padding-right:15px;height:40vh; width:50vw">
+            <canvas id="bar-chart1"></canvas>
+        </div>
+    </div>
+    <script>
+        var temperature_value;
+        var time_value;
+        function update(){
+        $.ajax({
+            type: 'GET',
+            url: 'get_users',
+            success: function (data) {
+                temperature_value = data.temperature;
+                time_value = data.date;
+            },
+        )};
+    };
 
-<script>
-    function update() {
-    $.ajax({
-        type: 'GET',
-        url: 'get_users',
-        success: function (data){
-            $.each(data,function(index,value){
-                $("#"+value.pot_id).text(value.pot_id+ ' - ' + value.temperature)
-            })
-        },
-        error: function (error){
-        }
-    }).then(function() {
+        $(document)(function () {
+        var a = document.getElementById("bar-chart").getContext("2d");
+        var first_chart = new Chart(a, {
+        width:10,
+        type: 'bar',
+        data: {
+        labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
+        datasets: [
+    {
+        label: "Population (millions)",
+        backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
+        data: [100, 5, 70, 75, 20],
+    }
+        ]
+    },
 
-    });
+        options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        legend: {display: false},
+        title: {
+        display: true,
+        text: 'Predicted world population (millions) in 2050'
+    },
+        scales: {
+        yAxes: [{
+        ticks: {
+        beginAtZero: true
+    }
+    }]
+    }
+    }
+    })
+        var b = document.getElementById("bar-chart1").getContext("2d");
+        var second_chart = new Chart(b, {
+        type: "line",
+        data: {
+        labels: ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"],
+        datasets: [
+    {
+        label: "Number of Moons",
+        data: temperature_value,
+        backgroundColor: "rgba(54,73,93,.5)",
+        borderColor: "#36495d",
+        borderWidth: 3
+    },
+    {
+        label: "Planetary Mass (relative to the Sun x 10^-6)",
+        data: time_value,
+        backgroundColor: "rgba(71, 183,132,.5)",
+        borderColor: "#47b784",
+        borderWidth: 3
+    }
+        ]
+    },
+        options: {
+        responsive: true,
+        lineTension: 1,
+        scales: {
+        yAxes: [
+    {
+        ticks: {
+        beginAtZero: true,
+    }
+    }
+        ]
+    }
+    }
+    })
+    };
 
-}
-    setInterval(update, 2000);
 </script>
 {% for state in states %}
     {% with n_id=state.pot_id %}
-        <h4 id = {{ n_id }}>{{ state.pot_id }} - {{ state.temperature }}</h4>
+        <h4 id= {{ n_id }}>{{ state.pot_id }} - {{ state.temperature }}</h4>
     {% endwith %}
 {% endfor %}
 </body>
