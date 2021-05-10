@@ -6,7 +6,7 @@ broker = 'localhost'
 port = 1883
 client_id = f'python-mqtt-{randint(0, 1000)}'
 main_topic = 'global/#'
-
+m_client = mqtt.Client(client_id)
 
 def on_connect(client, userdata, flags, rc):
     client.subscribe(main_topic)
@@ -30,7 +30,7 @@ def send(client, topic, message, retain=False, qos=0):
 
 
 def start():
-    m_client = mqtt.Client(client_id)
+
     m_client.on_connect = on_connect
     m_client.on_message = on_message
     m_client.connect(broker, port)
