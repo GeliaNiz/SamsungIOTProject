@@ -35,82 +35,161 @@
     var light_value;
 
 
-        $(document)(function () {
-        var a = document.getElementById("bar-chart").getContext("2d");
-        var first_chart = new Chart(a, {
-        width:10,
-        type: 'bar',
-        data: {
-        labels: ["Africa", "Asia", "Europe", "Latin America", "North America"],
-        datasets: [
-    {
-        label: "Population (millions)",
-        backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9", "#c45850"],
-        data: [100, 5, 70, 75, 20],
-    }
-        ]
-    },
+    $(function () {
+        function update() {
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: 'get_users/',
+                success: function (data) {
+                    temperature_value = data[0].temperature;
+                    humidity_value = data[0].humidity;
+                    light_value = data[0].illumination;
+                    var t = new Date();
+                    var time = data[0].date.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+                    t.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
+                    t.setMinutes(parseInt(time[3], 10) || 0);
+                    time_value = t.getUTCMinutes();
+                    temperature_chart.data.datasets[0].data.push(temperature_value);
+                    humidity_chart.data.datasets[0].data.push(humidity_value);
+                    light_chart.data.datasets[0].data.push(light_value);
+                    temperature_chart.data.labels.push(time_value);
+                    if (temperature_chart.data.labels.length > 20) {
+                        temperature_chart.data.datasets[0].data.shift();
+                        temperature_chart.data.labels.shift();
+                    }
+                    temperature_chart.update();
+                    humidity_chart.data.labels.push(time_value);
+                    if (humidity_chart.data.labels.length > 20) {
+                        humidity_chart.data.datasets[0].data.shift();
+                        humidity_chart.data.labels.shift();
+                    }
+                    humidity_chart.update();
+                    light_chart.data.labels.push(time_value);
+                    if (light_chart.data.labels.length > 20) {
+                        light_chart.data.datasets[0].data.shift();
+                        light_chart.data.labels.shift();
+                    }
+                    light_chart.update();
+                },
+                error: function (e) {
+                    console.log(e);
+                }
+            })
+        }
 
-        options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        legend: {display: false},
-        title: {
-        display: true,
-        text: 'Predicted world population (millions) in 2050'
-    },
-        scales: {
-        yAxes: [{
-        ticks: {
-        beginAtZero: true
-    }
-    }]
-    }
-    }
+        $("#btn_update").click(function () {
+            $.ajax({
+                type: 'POST',
+                url: 'update_data/',
+                success: function () {
+                    update();
+                }
+            })
+        })
+
+        let a = document.getElementById("temperature_chart").getContext("2d");
+        let temperature_chart = new Chart(a, {
+                type: "line",
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: "Temperature values",
+                            data: [],
+                            backgroundColor: "rgba(255,51,51,.4)",
+                            borderColor: "#cc0000",
+                            borderWidth: 3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    lineTension: 1,
+                    animation: {
+                        duration: 0
+                    },
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        )
+        let b = document.getElementById("humidity_chart").getContext("2d");
+        let humidity_chart = new Chart(b, {
+                type: "line",
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: "Humidity values",
+                            data: [],
+                            backgroundColor: "rgba(0,128,255,.4)",
+                            borderColor: "#36495d",
+                            borderWidth: 3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    lineTension: 1,
+                    animation: {
+                        duration: 0
+                    },
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        )
+        let c = document.getElementById("light_chart").getContext("2d");
+        let light_chart = new Chart(c, {
+                type: "line",
+                data: {
+                    labels: [],
+                    datasets: [
+                        {
+                            label: "Light values",
+                            data: [],
+                            backgroundColor: "rgba(255,153,51,.5)",
+                            borderColor: "#cc6600",
+                            borderWidth: 3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    lineTension: 1,
+                    animation: {
+                        duration: 0
+                    },
+                    scales: {
+                        yAxes: [
+                            {
+                                ticks: {
+                                    beginAtZero: true,
+                                }
+                            }
+                        ]
+                    }
+                }
+            }
+        )
+        setInterval(update, 200000);
     })
-        var b = document.getElementById("bar-chart1").getContext("2d");
-        var second_chart = new Chart(b, {
-        type: "line",
-        data: {
-        labels: ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"],
-        datasets: [
-    {
-        label: "Number of Moons",
-        data: temperature_value,
-        backgroundColor: "rgba(54,73,93,.5)",
-        borderColor: "#36495d",
-        borderWidth: 3
-    },
-    {
-        label: "Planetary Mass (relative to the Sun x 10^-6)",
-        data: time_value,
-        backgroundColor: "rgba(71, 183,132,.5)",
-        borderColor: "#47b784",
-        borderWidth: 3
-    }
-        ]
-    },
-        options: {
-        responsive: true,
-        lineTension: 1,
-        scales: {
-        yAxes: [
-    {
-        ticks: {
-        beginAtZero: true,
-    }
-    }
-        ]
-    }
-    }
-    })
-    };
 
 </script>
-{% for state in states %}
-    {% with n_id=state.pot_id %}
-        <h4 id= {{ n_id }}>{{ state.pot_id }} - {{ state.temperature }}</h4>
-    {% endwith %}
-{% endfor %}
 </body>
 </html>
