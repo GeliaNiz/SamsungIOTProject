@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from .models import *
 from .serializers import StateSerializer
 from .MQTTclient import *
+import json
 
 
 class StateView(APIView):
@@ -29,3 +30,12 @@ def update_data(request):
     message = 1
     send(m_client, 'global/update', message, True)
     return HttpResponse('work')
+
+@require_http_methods(['POST'])
+@csrf_exempt
+def control_watering(request):
+    if JsonRes(request.body):
+        send(m_client,'global/',"On",True)
+    else:
+        send(m_client,'global/',"OFF",True)
+    return HttpResponse('watering',safe=False)

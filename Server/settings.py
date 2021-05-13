@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'main_service.apps.MainServiceConfig'
+    'main_service.apps.MainServiceConfig',
+    #'channels'
 ]
 
 MIDDLEWARE = [
@@ -52,7 +53,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Server.urls'
-
+ASGI_APPLICATION = 'Server.asgi:application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

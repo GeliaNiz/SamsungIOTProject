@@ -4,192 +4,84 @@
     {% load static %}
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../static/dashboard.css">
 </head>
 <body>
-<h2 style = "text-align: center; margin-bottom: .5rem; font-style: oblique;background-color: aquamarine">Dashboard of home garden</h2>
+<h2 class = "header"><span class = "marked">Dashboard</span> of home
+    garden</h2>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
-      integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8"
-        crossorigin="anonymous"></script>
 
+<script type="text/javascript" src={% static "dashboard.js" %}></script>
 <div id="graphs">
-    <div id="container1" style="position: relative; float: left;height:40vh; width:40vw">
+    <div id="container1">
         <canvas id="temperature_chart"></canvas>
     </div>
-    <div id="container2" style="position: relative; float: left;height:40vh; width:40vw">
+    <div id="container2">
         <canvas id="humidity_chart"></canvas>
     </div>
-    <div id="container3" style="position: relative; float: left;height:40vh; width:40vw">
+    <div id="container3">
         <canvas id="light_chart"></canvas>
     </div>
 </div>
-<button id="btn_update" type="button" style="position: relative; " class="btn btn-outline-primary">Update data</button>
-<script>
-    var temperature_value;
-    var time_value;
-    var humidity_value;
-    var light_value;
+<button id="btn_update" type="button" class="btn btn-outline-primary">Update data</button>
+<div class="container">
+  <input type="checkbox" id="toggle-button" class="toggle-button">
+  <label for="toggle-button" class="text">Watering</label>
+</div>
+<div class="notification">
+    <svg class="notification__bell" viewBox="0 0 79 79" width="79" height="79">
+        <g
+                stroke="currentColor"
+                stroke-width="4">
+            <g transform="translate(2 2)">
+                <g transform="translate(37.5 0)">
+                    <circle
+                            cx="0"
+                            cy="8"
+                            r="8">
+                    </circle>
+                    <circle
+                            class="bell__clapper"
+                            cx="0"
+                            cy="63"
+                            r="12">
+                    </circle>
+                    <path
+                            class="bell__body"
+                            stroke-linejoin="round"
+                            d="M 0 8 a 25 25 0 0 1 25 25 v 17 l 5 6 q 3 7 -6 7 h -48 q -9 0 -6 -7 l 5 -6 v -17 a 25 25 0 0 1 25 -25">
+                    </path>
+                </g>
+            </g>
+        </g>
+    </svg>
+    <div class="notification__message message--info">
+        <h1>Info</h1>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing.</p>
 
 
-    $(function () {
-        function update() {
-            $.ajax({
-                type: 'GET',
-                dataType: 'json',
-                url: 'get_users/',
-                success: function (data) {
-                    temperature_value = data[0].temperature;
-                    humidity_value = data[0].humidity;
-                    light_value = data[0].illumination;
-                    var t = new Date();
-                    var time = data[0].date.match(/(\d+)(?::(\d\d))?\s*(p?)/);
-                    t.setHours(parseInt(time[1]) + (time[3] ? 12 : 0));
-                    t.setMinutes(parseInt(time[3], 10) || 0);
-                    time_value = t.getUTCMinutes();
-                    temperature_chart.data.datasets[0].data.push(temperature_value);
-                    humidity_chart.data.datasets[0].data.push(humidity_value);
-                    light_chart.data.datasets[0].data.push(light_value);
-                    temperature_chart.data.labels.push(time_value);
-                    if (temperature_chart.data.labels.length > 20) {
-                        temperature_chart.data.datasets[0].data.shift();
-                        temperature_chart.data.labels.shift();
-                    }
-                    temperature_chart.update();
-                    humidity_chart.data.labels.push(time_value);
-                    if (humidity_chart.data.labels.length > 20) {
-                        humidity_chart.data.datasets[0].data.shift();
-                        humidity_chart.data.labels.shift();
-                    }
-                    humidity_chart.update();
-                    light_chart.data.labels.push(time_value);
-                    if (light_chart.data.labels.length > 20) {
-                        light_chart.data.datasets[0].data.shift();
-                        light_chart.data.labels.shift();
-                    }
-                    light_chart.update();
-                },
-                error: function (e) {
-                    console.log(e);
-                }
-            })
-        }
-
-        $("#btn_update").click(function () {
-            $.ajax({
-                type: 'POST',
-                url: 'update_data/',
-                success: function () {
-                    update();
-                }
-            })
-        })
-
-        let a = document.getElementById("temperature_chart").getContext("2d");
-        let temperature_chart = new Chart(a, {
-                type: "line",
-                data: {
-                    labels: [],
-                    datasets: [
-                        {
-                            label: "Temperature values",
-                            data: [],
-                            backgroundColor: "rgba(255,51,51,.4)",
-                            borderColor: "#cc0000",
-                            borderWidth: 3
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    lineTension: 1,
-                    animation: {
-                        duration: 0
-                    },
-                    scales: {
-                        yAxes: [
-                            {
-                                ticks: {
-                                    beginAtZero: true,
-                                }
-                            }
-                        ]
-                    }
-                }
-            }
-        )
-        let b = document.getElementById("humidity_chart").getContext("2d");
-        let humidity_chart = new Chart(b, {
-                type: "line",
-                data: {
-                    labels: [],
-                    datasets: [
-                        {
-                            label: "Humidity values",
-                            data: [],
-                            backgroundColor: "rgba(0,128,255,.4)",
-                            borderColor: "#36495d",
-                            borderWidth: 3
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    lineTension: 1,
-                    animation: {
-                        duration: 0
-                    },
-                    scales: {
-                        yAxes: [
-                            {
-                                ticks: {
-                                    beginAtZero: true,
-                                }
-                            }
-                        ]
-                    }
-                }
-            }
-        )
-        let c = document.getElementById("light_chart").getContext("2d");
-        let light_chart = new Chart(c, {
-                type: "line",
-                data: {
-                    labels: [],
-                    datasets: [
-                        {
-                            label: "Light values",
-                            data: [],
-                            backgroundColor: "rgba(255,153,51,.5)",
-                            borderColor: "#cc6600",
-                            borderWidth: 3
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    lineTension: 1,
-                    animation: {
-                        duration: 0
-                    },
-                    scales: {
-                        yAxes: [
-                            {
-                                ticks: {
-                                    beginAtZero: true,
-                                }
-                            }
-                        ]
-                    }
-                }
-            }
-        )
-        setInterval(update, 200000);
-    })
-
-</script>
+        <button aria-labelledby="button-dismiss">
+            <span id="button-dismiss" hidden>Dismiss</span>
+            <svg viewBox="0 0 100 100" width="10" height="10">
+                <g
+                        stroke="currentColor"
+                        stroke-width="6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        fill="none">
+                    <g transform="translate(50 50) rotate(45)">
+                        <path
+                                d="M 0 -30 v 60 z M -30 0 h 60">
+                        </path>
+                    </g>
+                </g>
+            </svg>
+        </button>
+    </div>
+</div>
 </body>
 </html>
