@@ -28,14 +28,13 @@ def get_users(request):
 @csrf_exempt
 def update_data(request):
     message = 1
-    send(m_client, 'global/update', message, True)
+    send(m_client, '%/1/update', message, True)
     return HttpResponse('work')
+
 
 @require_http_methods(['POST'])
 @csrf_exempt
 def control_watering(request):
-    if JsonRes(request.body):
-        send(m_client,'global/',"On",True)
-    else:
-        send(m_client,'global/',"OFF",True)
-    return HttpResponse('watering',safe=False)
+    state = request.POST.get('state')
+    send(m_client, '%/1/control_pump', state, True)
+    return HttpResponse('Watering')

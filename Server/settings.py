@@ -26,7 +26,7 @@ SECRET_KEY = 'y!nm+svhs%3a38niy#71swkwi^9q$%lq9y&iw^h2^e+16ed1=l'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main_service.apps.MainServiceConfig',
-    #'channels'
+    'channels'
 ]
 
 MIDDLEWARE = [
@@ -53,7 +53,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Server.urls'
-ASGI_APPLICATION = 'Server.asgi:application'
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -72,7 +72,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Server.wsgi.application'
-
+ASGI_APPLICATION = 'Server.asgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'PlantDB',
         'USER': 'postgres',
-        'PASSWORD': 'sports',
+        'PASSWORD': 'adminka',
         'HOST': '127.0.0.1',
         'PORT': '5432'
     }
@@ -131,3 +131,12 @@ STATICFILES_DIRS = [
    os.path.join(BASE_DIR, "static"),
    ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("localhost", 6378)],
+        },
+    },
+}

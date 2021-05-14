@@ -10,7 +10,11 @@ body {
   background: hsl(0, 0%, 100%);
   font-family: "Noto Sans JP", sans-serif;
 }
-/* display the wrapping container in the top right corner of the viewport */
+
+.wrapper{
+  display: grid;
+}
+
 .notification {
   position: fixed;
   top: 0.5rem;
@@ -113,41 +117,39 @@ body {
 /* change the border color according to the different modifiers
 ! for each modifier specify also an svg icon in the background, to highlight the message
 */
-.message--info {
+.message--Pot_updated {
   border-left-color: #90dee9;
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle stroke="none" fill="%2390dee9" cx="50" cy="22" r="8"></circle><path fill="none" stroke="%2390dee9" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 45 40 h 5 v 40 h -5 h 10"></path></svg>'),
-    hsl(0, 0%, 100%);
-  background-repeat: no-repeat;
   background-size: 35px;
-  background-position: 100% 100%;
+  background: hsl(0, 0%, 100%) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle stroke="none" fill="%2390dee9" cx="50" cy="22" r="8"></circle><path fill="none" stroke="%2390dee9" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 45 40 h 5 v 40 h -5 h 10"></path></svg>') no-repeat 100% 100%;
 }
 .message--success {
   border-left-color: hsl(120, 67%, 74%);
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="none" stroke="%2390e990" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 20 52 l 25 25 l 30 -50"></path></svg>'),
-    hsl(0, 0%, 100%);
-  background-repeat: no-repeat;
+  hsl(0, 0%, 100%);
   background-size: 35px;
-  background-position: 100% 100%;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="none" stroke="%2390e990" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 20 52 l 25 25 l 30 -50"></path></svg>') no-repeat 100% 100%;
 }
 .message--warning {
   border-left-color: hsl(54, 67%, 74%);
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="none" stroke="%23e9e090" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 50 18 v 40"></path><circle stroke="none" fill="%23e9e090" cx="50" cy="78" r="8"></circle></svg>'),
-    hsl(0, 0%, 100%);
-  background-repeat: no-repeat;
   background-size: 35px;
-  background-position: 100% 100%;
+  background: hsl(0, 0%, 100%) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="none" stroke="%23e9e090" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 50 18 v 40"></path><circle stroke="none" fill="%23e9e090" cx="50" cy="78" r="8"></circle></svg>') no-repeat 100% 100%;
 }
 .message--danger {
   border-left-color: hsl(0, 67%, 74%);
-  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g transform="translate(50 50) rotate(45)"><path fill="none" stroke="%23e99090" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 0 -30 v 60 z M -30 0 h 60"></path></g></svg>'),
-    hsl(0, 0%, 100%);
-  background-repeat: no-repeat;
   background-size: 35px;
-  background-position: 100% 100%;
+  background: hsl(0, 0%, 100%) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g transform="translate(50 50) rotate(45)"><path fill="none" stroke="%23e99090" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 0 -30 v 60 z M -30 0 h 60"></path></g></svg>') no-repeat 100% 100%;
 }
-#btn_update {
+.info {
   position: absolute;
-  bottom:150px;
+  width: 15%;
+  bottom:43%;
+  right:35%;
+  display: flex;
+  flex-direction: column;
+
+}
+#toggle_pump{
+  position: absolute;
+  top: 60%;
 }
 #container1{
   position: relative;
@@ -182,7 +184,8 @@ body {
 .marked{
   background-color: #00ff98;
   color: black;
-   border-radius: 18px;
+  border-radius: 10px;
+  width: 100%;
 }
 .container {
   display: flex;
