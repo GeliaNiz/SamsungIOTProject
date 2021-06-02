@@ -4,8 +4,6 @@ let humidity_value;
 let light_value;
 
 
-
-
 $(function () {
     function update() {
         $.ajax({
@@ -57,6 +55,7 @@ $(function () {
             }
         })
     })
+
 
     let temp_canvas = document.getElementById("temperature_chart").getContext("2d");
     let temperature_chart = new Chart(temp_canvas, {
@@ -170,6 +169,11 @@ $(function () {
     ];
 
     const notification = document.querySelector('.notification');
+$(document).ready(function (){
+    $(this).change(function check_manual(checkbox) {
+        document.getElementById("pump_switch").disabled = !checkbox.checked;
+    })
+    });
 
     function dismissMessage() {
         notification.classList.remove('received');

@@ -82,7 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'PlantDB',
         'USER': 'postgres',
-        'PASSWORD': 'adminka',
+        'PASSWORD': 'sports',
         'HOST': '127.0.0.1',
         'PORT': '5432'
     }

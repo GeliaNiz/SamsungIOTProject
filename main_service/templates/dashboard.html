@@ -36,8 +36,14 @@
 <div class="info">
     <button id="btn_update" type="button" class="btn btn-outline-primary">Update data</button>
     <div class="custom-control custom-switch">
-        <input type="checkbox" class="custom-control-input" id="customSwitch1" onchange="update_pump()">
-        <label class="custom-control-label" for="customSwitch1">Pump control</label>
+        <input type="checkbox" class="custom-control-input" id="pump_switch" onchange="update_pump()">
+        <label class="custom-control-label" for="pump_switch">Pump control</label>
+    </div>
+    <div class="form-check">
+  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+  <label class="form-check-label" for="flexCheckDefault">
+    Manual control
+  </label>
     </div>
 </div>
 <script>
