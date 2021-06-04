@@ -169,10 +169,9 @@ $(function () {
     ];
 
     const notification = document.querySelector('.notification');
-$(document).ready(function (){
-    $(this).change(function check_manual(checkbox) {
-        document.getElementById("pump_switch").disabled = !checkbox.checked;
-    })
+    let manual_control = document.getElementById("flexCheckDefault");
+    manual_control.addEventListener('change',(event)=> {
+        document.getElementById("pump_switch").disabled = !manual_control.checked;
     });
 
     function dismissMessage() {
