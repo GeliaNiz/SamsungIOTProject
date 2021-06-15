@@ -195,6 +195,11 @@ body {
   height: 100vh;
 }
 
+#btn_update{
+  top: 10px;
+}
+
+
 .text {
   cursor: pointer;
   font-size: 2rem;

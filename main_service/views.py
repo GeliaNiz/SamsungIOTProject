@@ -38,3 +38,10 @@ def control_watering(request):
     state = request.POST.get('state')
     send(m_client, '%/1/control_pump', state, True)
     return HttpResponse('Watering')
+
+@require_http_methods(['POST'])
+@csrf_exempt
+def control_manual(request):
+    state = request.POST.get('state')
+    send(m_client, '%/1/manual', state, True)
+    return HttpResponse('Manual')

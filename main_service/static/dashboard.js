@@ -14,7 +14,7 @@ $(function () {
             success: function (data) {
                 temperature_value = data[0].temperature;
                 humidity_value = data[0].humidity;
-                light_value = data[0].illumination;
+                light_value = 1-data[0].light;
                 let t = new Date();
                 let time = data[0].date.split('.')[0]
                 time_value = time;
@@ -127,11 +127,11 @@ $(function () {
     let light_chart = new Chart(lgt_canvas, {
             type: "line",
             data: {
-                labels: [],
+                labels: [0],
                 datasets: [
                     {
-                        label: "Light",
-                        data: [],
+                        label: "Light2",
+                        data: [0],
                         backgroundColor: "rgba(255,153,51,.5)",
                         borderColor: "#cc6600",
                         borderWidth: 3
@@ -172,6 +172,14 @@ $(function () {
     let manual_control = document.getElementById("flexCheckDefault");
     manual_control.addEventListener('change',(event)=> {
         document.getElementById("pump_switch").disabled = !manual_control.checked;
+        $.ajax({
+            type: 'POST',
+            url: 'manual_control/',
+            data: {"state": +manual_control.checked},
+            success: function () {
+
+            }
+        })
     });
 
     function dismissMessage() {

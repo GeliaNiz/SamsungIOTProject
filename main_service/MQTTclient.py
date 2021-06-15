@@ -8,7 +8,7 @@ from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
 
-broker = 'localhost'
+broker = '192.168.43.120'
 port = 1883
 client_id = f'python-mqtt-{randint(0, 1000)}'
 main_topic = '%/#'
@@ -21,10 +21,10 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_message(client, userdata, msg):
-    print(msg.topic)
+
     main_thread, pot_id, attribute = str(msg.topic).split('/')
-    value = float(msg.payload)
-    if attribute in 'temperature, humidity, illumination':
+    value = float(msg.payload.decode("UTF-8")[0:3])
+    if attribute in 'temperature, humidity, light':
         if not State.objects.filter(pot_id=int(pot_id)).exists():
             state = State()
         else:
@@ -35,6 +35,7 @@ def on_message(client, userdata, msg):
         state.save()
         return 'attribute_update'
     if attribute == 'pump':
+        print(msg.topic)
         msg = "Pump off"
         if value == 1:
             msg = "Pump on"
