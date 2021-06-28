@@ -8,5 +8,6 @@ urlpatterns = [
     path('get_users/', get_users),
     path('update_data/',update_data),
     path('control_watering/',control_watering),
-    path('manual_control/',control_manual)
+    path('manual_control/',control_manual),
+    path('send_mqtt/',send_mqtt)
 ]

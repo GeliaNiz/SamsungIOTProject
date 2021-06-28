@@ -188,8 +188,6 @@ $(function () {
 
     function showMessage() {
         notification.classList.add('received');
-
-
         const button = document.querySelector('.notification__message button');
         button.addEventListener('click', dismissMessage, {once: true});
     }

@@ -12,4 +12,4 @@ class State(models.Model):
     fertilizer_flow = models.FloatField(default=0)
     water_level = models.FloatField(default=0)
     fertilizer_level = models.FloatField(default=0)
-    date = models.TimeField(default=datetime.datetime.now().time())
+    date = models.DateTimeField(auto_now=True)

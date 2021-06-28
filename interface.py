@@ -29,13 +29,14 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
         self.sock.setsockopt(SOL_SOCKET, SO_REUSEADDR, 1)
         self.sock.setsockopt(SOL_SOCKET, SO_BROADCAST, 1)
         self.sock.settimeout(0.5)
-        self.sock.bind((get_ip(), 8082))
+        self.sock.bind((get_ip(), 8090))
+        self.find_devices()
 
     def find_devices(self):
         self.devicesList.clear()
         dev_list = []
-        message = b'CONN_WAIT'
-        self.sock.sendto(message, ('255.255.255.255', 8090))
+        message = get_ip().encode('UTF-8')
+        self.sock.sendto(message, ('255.255.255.255', 8091))
         while True:
             try:
                 conn = self.sock.recvfrom(32)
@@ -49,8 +50,7 @@ class ExampleApp(QtWidgets.QMainWindow, design.Ui_MainWindow):
     def connect(self):
         addreses = self.devicesList.selectedItems()
         for addr in addreses:
-            self.sock.sendto(b'CONNECT', literal_eval(addr.text()))
-            conn = self.sock.recvfrom(32)
+            self.sock.sendto(get_ip().encode('UTF-8'), literal_eval(addr.text()))
 
 
 

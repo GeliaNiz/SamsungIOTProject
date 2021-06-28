@@ -1,0 +1,195 @@
+.tim-typo {
+  padding-left: 25%;
+  margin-bottom: 40px;
+  position: relative;
+  width: 100%;
+}
+
+.tim-typo .tim-note {
+  bottom: 5px;
+  color: #c0c1c2;
+  display: block;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 15px;
+  left: 0;
+  margin-left: 20px;
+  position: absolute;
+  width: 260px;
+}
+
+/* offline-doc */
+
+.offline-doc .navbar.navbar-transparent {
+  padding-top: 25px;
+  border-bottom: none;
+}
+
+.offline-doc .navbar.navbar-transparent .navbar-minimize {
+  display: none;
+}
+
+.offline-doc .navbar.navbar-transparent .navbar-brand,
+.offline-doc .navbar.navbar-transparent .collapse .navbar-nav .nav-link {
+  color: #FFFFFF !important;
+}
+
+.offline-doc .footer {
+  z-index: 3 !important;
+}
+
+.offline-doc .page-header .container {
+  z-index: 3;
+}
+
+.offline-doc .page-header:after {
+  background-color: rgba(0, 0, 0, 0.5);
+  content: "";
+  display: block;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 2;
+}
+
+#map {
+  z-index: 2;
+  height: calc(100vh - 70px);
+  margin-top: 70px;
+}
+
+.control{
+  display: flex;
+}
+
+.nav-sub-item{
+  padding-top: 5%;
+  padding-left: 30%;
+}
+
+.notification {
+  position: fixed;
+  top: 0.5rem;
+  right: 1rem;
+  /* align the content to the rigth */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  color: hsl(0, 0%, 20%);
+  /* hide the overflow to conceal the message when translated to the right of the container */
+  overflow-x: hidden;
+  /* padding to avoid cropping the box-shadow on the message */
+  padding: 0.25rem;
+}
+
+
+.notification__bell {
+  display: block;
+  width: 48px;
+  height: auto;
+  fill: hsl(0, 0%, 100%);
+}
+.notification.received .bell__body {
+  animation: swingBody 0.7s 0.02s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+.notification.received .bell__clapper {
+  animation: swingClapper 0.7s 0.04s cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+@keyframes swingBody {
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+@keyframes swingClapper {
+  5% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-8deg);
+  }
+  80% {
+    transform: rotate(8deg);
+  }
+}
+
+.notification__message {
+  display: grid;
+  grid-gap: 0.2rem;
+  grid-template-columns: 1fr auto;
+  padding: 0.5rem 1rem;
+  margin: 1rem 0;
+  /* style the div as a rounded rectangle with a border on the left segment */
+  background: hsl(0, 0%, 100%);
+  border-radius: 10px;
+  box-shadow: 0 0 5px hsla(0, 0%, 0%, 0.1), 0 2px 3px hsla(0, 0%, 0%, 0.1);
+  border-left: 0.5rem solid hsl(0, 0%, 100%);
+  /* by default hide the element from sight and include a transition for the chosen properties */
+  transform: translateX(100%);
+  opacity: 0;
+  visibility: hidden;
+  transition-property: transform, opacity, visibility;
+  transition-duration: 0.7s;
+  transition-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+.notification__message h1 {
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+.notification__message p {
+  max-width: 320px;
+  font-size: 0.8rem;
+  grid-column: 1/-1;
+}
+.notification__message button {
+  background: none;
+  border: none;
+  color: inherit;
+  width: 20px;
+  height: 20px;
+  grid-column: 2/3;
+  grid-row: 1/2;
+  align-self: center;
+}
+.notification__message button svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* when the .notification container has a class of .received transition the message into view */
+.notification.received .notification__message {
+  transform: translateX(0%);
+  opacity: 1;
+  visibility: visible;
+}
+/* change the border color according to the different modifiers
+! for each modifier specify also an svg icon in the background, to highlight the message
+*/
+.message--update {
+  border-left-color: #90dee9;
+  background-size: 35px;
+  background: hsl(0, 0%, 100%) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle stroke="none" fill="%2390dee9" cx="50" cy="22" r="8"></circle><path fill="none" stroke="%2390dee9" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 45 40 h 5 v 40 h -5 h 10"></path></svg>') no-repeat 100% 100%;
+}
+.message--success {
+  border-left-color: hsl(120, 67%, 74%);
+  hsl(0, 0%, 100%);
+  background-size: 35px;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="none" stroke="%2390e990" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 20 52 l 25 25 l 30 -50"></path></svg>') no-repeat 100% 100%;
+}
+.message--warning {
+  border-left-color: hsl(54, 67%, 74%);
+  background-size: 35px;
+  background: hsl(0, 0%, 100%) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="none" stroke="%23e9e090" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 50 18 v 40"></path><circle stroke="none" fill="%23e9e090" cx="50" cy="78" r="8"></circle></svg>') no-repeat 100% 100%;
+}
+.message--danger {
+  border-left-color: hsl(0, 67%, 74%);
+  background-size: 35px;
+  background: hsl(0, 0%, 100%) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><g transform="translate(50 50) rotate(45)"><path fill="none" stroke="%23e99090" stroke-width="12" stroke-linejoin="round" stroke-linecap="round" d="M 0 -30 v 60 z M -30 0 h 60"></path></g></svg>') no-repeat 100% 100%;
+}
+

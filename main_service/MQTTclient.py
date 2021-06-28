@@ -7,11 +7,12 @@ from .consumers import WSConsumer
 from channels.generic.websocket import WebsocketConsumer
 from channels.layers import get_channel_layer
 from asgiref.sync import async_to_sync
+from interface import get_ip
 
-broker = '192.168.43.120'
+broker = get_ip()
 port = 1883
 client_id = f'python-mqtt-{randint(0, 1000)}'
-main_topic = '%/#'
+main_topic = '%/data/#'
 m_client = mqtt.Client(client_id)
 
 
@@ -22,15 +23,16 @@ def on_connect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
 
-    main_thread, pot_id, attribute = str(msg.topic).split('/')
-    value = float(msg.payload.decode("UTF-8")[0:3])
+    main_thread, data, pot_id, attribute = str(msg.topic).split('/')
+    value = float(msg.payload.decode("UTF-8")[0:4])
     if attribute in 'temperature, humidity, light':
         if not State.objects.filter(pot_id=int(pot_id)).exists():
             state = State()
         else:
             state = State.objects.get(pot_id=int(pot_id))
         setattr(state, attribute, value)
-        state.date = datetime.datetime.now().time()
+        state.date = datetime.datetime.now()
+
         state.pot_id = int(pot_id)
         state.save()
         return 'attribute_update'
@@ -53,6 +55,6 @@ def send(client, topic, message, retain=False, qos=0):
 def start():
     m_client.on_connect = on_connect
     m_client.on_message = on_message
-    m_client.connect(broker, port)
+    m_client.connect(broker, port, keepalive=50)
 
     m_client.loop_start()
